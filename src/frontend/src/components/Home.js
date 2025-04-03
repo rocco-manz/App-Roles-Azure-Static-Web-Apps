@@ -8,9 +8,20 @@ import {
   Code,
   Container,
   Divider,
+  Alert,
+  AlertIcon,
 } from "@chakra-ui/react";
 
 function Home({ authenticated, userInfo }) {
+  // Check if user has any custom roles beyond standard ones
+  const hasCustomRoles =
+    userInfo &&
+    userInfo.clientPrincipal &&
+    userInfo.clientPrincipal.userRoles &&
+    userInfo.clientPrincipal.userRoles.filter(
+      (role) => !["anonymous", "authenticated"].includes(role.toLowerCase()),
+    ).length > 0;
+
   return (
     <Container maxW="container.lg" py={10}>
       <VStack spacing={4} align="stretch">
@@ -26,6 +37,16 @@ function Home({ authenticated, userInfo }) {
           <Badge colorScheme="red" fontSize="xl" p={2} alignSelf="center">
             YOU ARE NOT AUTHENTICATED
           </Badge>
+        )}
+
+        {authenticated && !hasCustomRoles && (
+          <Alert status="warning" borderRadius="md" mt={4}>
+            <AlertIcon />
+            <Text fontWeight="medium">
+              You are authenticated but not authorized as you have no specific
+              role assigned!
+            </Text>
+          </Alert>
         )}
 
         <Divider my={4} />
@@ -50,6 +71,21 @@ function Home({ authenticated, userInfo }) {
                   <Text fontWeight="bold">User ID:</Text>
                   <Code p={2} borderRadius="md" width="100%">
                     {userInfo.clientPrincipal.userId}
+                  </Code>
+                </Box>
+
+                <Box>
+                  <Text fontWeight="bold">User Roles:</Text>
+                  <Code
+                    p={2}
+                    borderRadius="md"
+                    width="100%"
+                    display="block"
+                    whiteSpace="pre-wrap"
+                  >
+                    {userInfo.clientPrincipal.userRoles
+                      ? userInfo.clientPrincipal.userRoles.join(", ")
+                      : "None"}
                   </Code>
                 </Box>
 
