@@ -2,15 +2,11 @@
   "routes": [
     {
       "route": "/api/user",
-      "allowedRoles": [
-        "user"
-      ]
+      "allowedRoles": ["user"]
     },
     {
       "route": "/api/master",
-      "allowedRoles": [
-        "admin"
-      ]
+      "allowedRoles": ["admin"]
     }
   ],
   "auth": {
@@ -18,7 +14,7 @@
     "identityProviders": {
       "azureActiveDirectory": {
         "registration": {
-          "openIdIssuer": "https://login.microsoftonline.com/{{AZURE_TENANT_ID}}/v2.0",
+          "openIdIssuer": "https://login.microsoftonline.com/0b9fd591-a64c-4805-a599-a7624e8bdb8b/v2.0",
           "clientIdSettingName": "AZURE_CLIENT_ID",
           "clientSecretSettingName": "AZURE_CLIENT_SECRET"
         }
