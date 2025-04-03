@@ -1,19 +1,21 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { Link, Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
-import Home from './components/Home';
+import Home from "./components/Home";
 
-import { ChakraProvider } from '@chakra-ui/react'
+import { ChakraProvider } from "@chakra-ui/react";
 import {
   TabList,
   TabPanels,
   Tab,
   Tabs,
   Button,
-} from '@chakra-ui/react'
-import Admin from './components/Admin';
-import User from './components/User';
+  Flex,
+  Box,
+} from "@chakra-ui/react";
+import Admin from "./components/Admin";
+import User from "./components/User";
 
 function App() {
   const [userInfo, setUserInfo] = useState(null);
@@ -21,7 +23,7 @@ function App() {
 
   useEffect(() => {
     async function getUserInfo() {
-      const response = await fetch('/.auth/me');
+      const response = await fetch("/.auth/me");
       const user = await response.json();
       setUserInfo(user);
       setAuthenticated(user.clientPrincipal !== null);
@@ -33,26 +35,38 @@ function App() {
   return (
     <ChakraProvider>
       <Router>
-        <Tabs isFitted={true} orientation={'vertical'}>
-          <TabList margin={3} w={'10%'} h='100%'>
-            <Link to="/">
-              <Tab>Home</Tab>
-            </Link>
-            <Link to="/user">
-              <Tab>User</Tab>
-            </Link>
-            <Link to="/admin">
-              <Tab>Admin</Tab>
-            </Link>
+        <Tabs isFitted={true} orientation={"vertical"}>
+          <TabList margin={3} w={"10%"} h="100%">
+            {authenticated ? (
+              // Only show navigation tabs if authenticated
+              <>
+                <Link to="/">
+                  <Tab>Home</Tab>
+                </Link>
+                <Link to="/user">
+                  <Tab>User</Tab>
+                </Link>
+                <Link to="/admin">
+                  <Tab>Admin</Tab>
+                </Link>
+              </>
+            ) : null}
 
             <Button margin={2}>
-              {!authenticated ? <a href="/.auth/login/aad">Login</a> : <a href="/.auth/logout">Logout</a>}
+              {!authenticated ? (
+                <a href="/.auth/login/aad">Login</a>
+              ) : (
+                <a href="/.auth/logout">Logout</a>
+              )}
             </Button>
           </TabList>
           <TabPanels flexDir="column" marginTop={7}>
             <Routes>
-              <Route path="/"
-                element={<Home authenticated={authenticated} userInfo={userInfo} />}
+              <Route
+                path="/"
+                element={
+                  <Home authenticated={authenticated} userInfo={userInfo} />
+                }
               />
               <Route path="/user" Component={User} />
               <Route path="/admin" Component={Admin} />
@@ -65,3 +79,4 @@ function App() {
 }
 
 export default App;
+

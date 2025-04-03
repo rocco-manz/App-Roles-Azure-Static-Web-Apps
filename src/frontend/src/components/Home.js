@@ -1,27 +1,29 @@
-import React from 'react';
-import { Heading, Text, Badge } from '@chakra-ui/react'
+import React from "react";
+import { Heading, Text, Badge, Center, VStack } from "@chakra-ui/react";
 
-
-// eslint-disable-next-line react/prop-types
-function Home({authenticated, userInfo}) {
-    return (
-        <div>
-            <Heading as='h2'>Azure SWA App Roles Demo</Heading>
-            <hr />
-            {authenticated ? (
-                <div>
-                <Badge colorScheme='green'>You are AUTHENTICATED</Badge>
-                </div>
-            ) : (
-                <div>
-                <Badge colorScheme='red'>You are NOT AUTHENTICATED</Badge>
-                </div>
-            )}
-            <br />
-            <Text whiteSpace="pre">{userInfo && JSON.stringify(userInfo, null, 2)}</Text>
-            
-        </div>
-    );
+function Home({ authenticated, userInfo }) {
+  return (
+    <Center h="100vh">
+      <VStack spacing={4}>
+        <Heading as="h1" size="2xl" textAlign="center">
+          Entra-ID Workshop
+        </Heading>
+        {authenticated ? (
+          <Badge colorScheme="green" fontSize="xl" p={2}>
+            You are AUTHENTICATED
+          </Badge>
+        ) : (
+          <Badge colorScheme="red" fontSize="xl" p={2}>
+            You are NOT AUTHENTICATED
+          </Badge>
+        )}
+        <Text whiteSpace="pre">
+          {userInfo && JSON.stringify(userInfo, null, 2)}
+        </Text>
+      </VStack>
+    </Center>
+  );
 }
 
 export default Home;
+
