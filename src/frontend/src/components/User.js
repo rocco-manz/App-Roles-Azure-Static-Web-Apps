@@ -9,18 +9,36 @@ import {
   Alert,
   AlertIcon,
   Container,
+  Spinner,
 } from "@chakra-ui/react";
 
 const User = () => {
-  const [authenticated, setAuthenticated] = useState(false);
+  const [authenticated, setAuthenticated] = useState(null); // null means loading
 
   useEffect(() => {
+    let isMounted = true;
+
     async function getUserInfo() {
-      const response = await fetch("/api/user");
-      setAuthenticated(response.status === 200);
+      try {
+        const response = await fetch("/api/user");
+
+        // Only update state if component is still mounted
+        if (isMounted) {
+          setAuthenticated(response.status === 200);
+        }
+      } catch (error) {
+        if (isMounted) {
+          setAuthenticated(false);
+        }
+      }
     }
 
     getUserInfo();
+
+    // Cleanup function to handle component unmounting
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return (
@@ -30,7 +48,9 @@ const User = () => {
           User Access
         </Heading>
 
-        {authenticated ? (
+        {authenticated === null ? (
+          <Spinner size="xl" thickness="4px" speed="0.65s" color="blue.500" />
+        ) : authenticated ? (
           <Badge colorScheme="green" fontSize="lg" p={3}>
             This is the user page.
           </Badge>
@@ -54,4 +74,3 @@ const User = () => {
 };
 
 export default User;
-

@@ -22,6 +22,15 @@ function Home({ authenticated, userInfo }) {
       (role) => !["anonymous", "authenticated"].includes(role.toLowerCase()),
     ).length > 0;
 
+  // Filter out the 'anonymous' and 'authenticated' standard roles for display
+  const displayRoles =
+    userInfo && userInfo.clientPrincipal && userInfo.clientPrincipal.userRoles
+      ? userInfo.clientPrincipal.userRoles.filter(
+          (role) =>
+            !["anonymous", "authenticated"].includes(role.toLowerCase()),
+        )
+      : [];
+
   return (
     <Container maxW="container.lg" py={10}>
       <VStack spacing={4} align="stretch">
@@ -83,9 +92,7 @@ function Home({ authenticated, userInfo }) {
                     display="block"
                     whiteSpace="pre-wrap"
                   >
-                    {userInfo.clientPrincipal.userRoles
-                      ? userInfo.clientPrincipal.userRoles.join(", ")
-                      : "None"}
+                    {displayRoles.length > 0 ? displayRoles.join(", ") : "None"}
                   </Code>
                 </Box>
 
